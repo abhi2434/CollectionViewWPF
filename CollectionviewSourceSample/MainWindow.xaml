@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:CollectionviewSourceSample" 
         x:Name="mainWin"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525" FontSize="14">
     <Window.Resources>
         <DataTemplate x:Key="HeaderTemplateArrowUp">
             <DockPanel>
@@ -32,33 +32,22 @@
             <Setter Property="Visibility" Value="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, Converter={StaticResource convVis}, ConverterParameter=True}" />
         </Style>
     </Window.Resources>
-    <Grid x:Name="grdMain">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-        <GroupBox Header="Filter">
-            <StackPanel Orientation="Horizontal" >
-                <TextBlock Text="Filter By :" />
-                <ComboBox ItemsSource="{Binding Columns}" x:Name="cmbProperty" />
-                <TextBox x:Name="txtFilter" MinWidth="50" />
-                <Button x:Name="btnFilter" Click="btnFilter_Click" Content="Apply Filter"/>
-                <Button x:Name="btnClear" Click="btnClear_Click" Content="Clear Filter"/>
-            </StackPanel>
-        </GroupBox>
-            <GroupBox Header="Grouping">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Group By :" />
-                    <ComboBox ItemsSource="{Binding Columns}" x:Name="cmbGroups" />
-                    <Button x:Name="btnGroup" Click="btnGroup_Click"  Content="Apply Group"/>
-                    <Button x:Name="btnClearGr" Click="btnClearGr_Click"  Content="Clear Group"/>
-                </StackPanel>
-            </GroupBox>
+    <DockPanel x:Name="grdMain">
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom">
+            <Button Content="&lt;|" Click="btnNavigation_Click" Tag="0" />
+            <Button Content="&lt;" Click="btnNavigation_Click" Tag="1" />
+            <Button Content="&gt;" Click="btnNavigation_Click" Tag="2" />
+            <Button Content="|&gt;" Click="btnNavigation_Click" Tag="3" />
+            <Button HorizontalAlignment="Right" x:Name="btnEvaluate" Content="Evaluate Selected Object" Click="btnEvaluate_Click" />
         </StackPanel>
+
+        <ToolBar DockPanel.Dock="Top" >
+            <local:TypeControl x:Name="FilterControl" Type="{x:Type local:ViewItem}" Header="Filter"  Apply="buttonAppy_Click" Clear="btnClear_Click"></local:TypeControl>
+            <local:TypeControl x:Name="GroupControl" ShowValue="False" Header="Group"  Type="{x:Type local:ViewItem}" Apply="btnGroup_Click" Clear="btnClearGr_Click"></local:TypeControl>
+        </ToolBar>
+        
         <ListView ItemsSource="{Binding}" x:Name="lvItems" GridViewColumnHeader.Click="ListView_Click" IsSynchronizedWithCurrentItem="True" Grid.Row="1">
-        <ListView.GroupStyle>
+            <ListView.GroupStyle >
             <GroupStyle>
                 <GroupStyle.HeaderTemplate>
                     <DataTemplate>
@@ -66,11 +55,11 @@
                     </DataTemplate>
                 </GroupStyle.HeaderTemplate>
             </GroupStyle>
-        </ListView.GroupStyle>
+            </ListView.GroupStyle>
             <ListView.View>
-                <GridView AllowsColumnReorder="True">
-                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" />
-                    <GridViewColumn Header="Name">
+                <GridView AllowsColumnReorder="True" >
+                    <GridViewColumn Header="Id" DisplayMemberBinding="{Binding Id}" Width="40"/>
+                    <GridViewColumn Header="Name"  Width="140">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -80,17 +69,17 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Developer">
+                    <GridViewColumn Header="Developer"  Width="140">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
                                     <TextBlock Text="{Binding Path=Developer}" Style="{StaticResource ListViewUnSelected}" />
-                                    <ComboBox SelectedItem="{Binding Path=Developer}" ItemsSource="{Binding ElementName=mainWin, Path=DeveloperList}" Style="{StaticResource ListViewSelected}" />
+                                    <ComboBox SelectedItem="{Binding Path=Developer}" Width="60" ItemsSource="{Binding ElementName=mainWin, Path=DeveloperList}" Style="{StaticResource ListViewSelected}" />
                                 </Grid>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Salary">
+                    <GridViewColumn Header="Salary"  Width="140">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Grid>
@@ -103,12 +92,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <StackPanel Orientation="Horizontal" Grid.Row="2">
-            <Button Content="&lt;|" Click="btnNavigation_Click" Tag="0" />
-            <Button Content="&lt;" Click="btnNavigation_Click" Tag="1" />
-            <Button Content="&gt;" Click="btnNavigation_Click" Tag="2" />
-            <Button Content="|&gt;" Click="btnNavigation_Click" Tag="3" />
-            <Button HorizontalAlignment="Right" x:Name="btnEvaluate" Content="Evaluate Selected Object" Click="btnEvaluate_Click" />
-        </StackPanel>
-    </Grid>
+
+    </DockPanel>
 </Window>
